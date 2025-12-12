@@ -1,0 +1,109 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+public class QueueUsingTwoStacksDynamic {
+
+    private Stack<Integer> stack1 = new Stack<>();
+    private Stack<Integer> stack2 = new Stack<>();
+
+    // Enqueue
+    public void enqueue(int data) {
+        stack1.push(data);
+        System.out.println(data + " enqueued.");
+    }
+
+    // Dequeue
+    public int dequeue() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty! Cannot dequeue.");
+            return -1;
+        }
+        moveStack1ToStack2();
+        int removed = stack2.pop();
+        System.out.println(removed + " dequeued.");
+        return removed;
+    }
+
+    // Peek
+    public int peek() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty!");
+            return -1;
+        }
+        moveStack1ToStack2();
+        return stack2.peek();
+    }
+
+    // Display
+    public void display() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty!");
+            return;
+        }
+        moveStack1ToStack2();
+        System.out.println("Queue elements (front to rear): " + stack2);
+    }
+
+    // Helper: Move elements only when needed
+    private void moveStack1ToStack2() {
+        if (stack2.isEmpty()) {
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+    }
+
+    public boolean isEmpty() {
+        return stack1.isEmpty() && stack2.isEmpty();
+    }
+
+    // Main with dynamic input
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        QueueUsingTwoStacksDynamic queue = new QueueUsingTwoStacksDynamic();
+
+        while (true) {
+            System.out.println("\n--- Queue Using Two Stacks ---");
+            System.out.println("1. Enqueue");
+            System.out.println("2. Dequeue");
+            System.out.println("3. Peek");
+            System.out.println("4. Display");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter value to enqueue: ");
+                    int value = sc.nextInt();
+                    queue.enqueue(value);
+                    break;
+
+                case 2:
+                    queue.dequeue();
+                    break;
+
+                case 3:
+                    int peekValue = queue.peek();
+                    if (peekValue != -1) {
+                        System.out.println("Front element: " + peekValue);
+                    }
+                    break;
+
+                case 4:
+                    queue.display();
+                    break;
+
+                case 5:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice! Try again.");
+            }
+        }
+    }
+}
+
